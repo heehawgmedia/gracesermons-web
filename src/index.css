@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Grace Sermons palette — warm paper, deep forest, antique gold */
+  --color-paper: #faf9f6;
+  --color-ink: #1c1917;
+  --color-forest-50: #f0f5f1;
+  --color-forest-100: #dbe7dd;
+  --color-forest-600: #2d5a3d;
+  --color-forest-700: #1b4332;
+  --color-forest-800: #143326;
+  --color-forest-900: #0d241a;
+  --color-gold-300: #e7c983;
+  --color-gold-400: #d4a052;
+  --color-gold-500: #c08a3e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+}
+
+/* --- Verse marquee ------------------------------------------------------ */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 90s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* --- Player range input ------------------------------------------------- */
+
+input[type='range'].player-seek {
+  @apply h-1.5 w-full cursor-pointer appearance-none rounded-full;
+  background:
+    linear-gradient(var(--color-gold-400), var(--color-gold-400)) 0 / var(--seek-fill, 0%)
+      100% no-repeat,
+    #e7e5e4;
+}
+
+input[type='range'].player-seek::-webkit-slider-thumb {
+  @apply size-3.5 appearance-none rounded-full bg-gold-400;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+
+input[type='range'].player-seek::-moz-range-thumb {
+  @apply size-3.5 rounded-full border-0 bg-gold-400;
+}
