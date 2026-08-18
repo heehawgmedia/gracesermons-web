@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useVisitCount } from '../lib/visits';
 
 export function Footer() {
+  const visits = useVisitCount();
   return (
     <footer className="mt-20 border-t border-stone-200 bg-forest-900 text-stone-300">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
@@ -45,6 +47,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-stone-500">
         © {new Date().getFullYear()} Grace Sermons · <Link to="/admin" className="hover:text-stone-300">Admin</Link>
+        {visits !== null && <> · {visits.toLocaleString()} visits</>}
       </div>
     </footer>
   );
