@@ -23,11 +23,16 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-xs font-semibold tracking-widest text-gold-400 uppercase">Support</h3>
+          <h3 className="text-xs font-semibold tracking-widest text-gold-400 uppercase">Give</h3>
           <p className="mt-3 text-sm text-stone-400">
-            Text <span className="font-semibold text-gold-300">GLORY2HIM</span> to{' '}
-            <span className="font-semibold text-gold-300">53-555</span> to support the ministry.
+            Your giving keeps these sermons free for everyone.
           </p>
+          <Link
+            to="/give"
+            className="mt-3 inline-block rounded-full bg-gold-400 px-5 py-2 text-sm font-semibold text-forest-900 transition hover:bg-gold-300"
+          >
+            Give Online
+          </Link>
           <p className="mt-6 text-xs text-stone-500">
             &ldquo;Faith cometh by hearing, and hearing by the word of God.&rdquo; — Romans 10:17
           </p>
