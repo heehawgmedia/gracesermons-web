@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { formatDate, formatDuration } from '../lib/api';
 import { fallbackCover } from '../lib/images';
 import type { Sermon } from '../lib/types';
 import { usePlayer } from '../player/PlayerContext';
+import { ShareButton } from './ShareButton';
 
 interface Props {
   sermon: Sermon;
@@ -26,6 +28,9 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
+        <div className="absolute top-3 right-3">
+          <ShareButton sermon={sermon} pastorName={pastorName} />
+        </div>
         {playable && (
           <button
             onClick={() => player.play(sermon, queue, queueLabel)}
@@ -49,7 +54,9 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
       </div>
       <div className="p-4">
         <h3 className="font-display line-clamp-2 leading-snug font-semibold text-forest-800">
-          {sermon.title}
+          <Link to={`/sermon/${sermon.id}`} className="hover:underline">
+            {sermon.title}
+          </Link>
         </h3>
         <p className="mt-1 text-sm text-stone-500">
           {pastorName} · {formatDate(sermon.date)}

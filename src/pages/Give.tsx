@@ -13,7 +13,7 @@ export function Give() {
     <>
       <PageHero
         image={IMAGES.wheat}
-        title="Give"
+        title="Support"
         subtitle="Support the ministry — every gift helps keep these sermons free for everyone."
       />
       <div className="mx-auto max-w-2xl px-4 sm:px-6">

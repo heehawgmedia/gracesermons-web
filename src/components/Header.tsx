@@ -7,7 +7,7 @@ const NAV = [
   { to: '/devotional', label: 'Devotional' },
   { to: '/bible', label: 'Bible' },
   { to: '/music', label: 'Music' },
-  { to: '/give', label: 'Give' },
+  { to: '/support', label: 'Support' },
 ];
 
 export function Header() {

@@ -1,10 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { PlayerProvider } from './player/PlayerContext';
 import { CatalogProvider } from './lib/CatalogProvider';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Sermons } from './pages/Sermons';
 import { SeriesDetail } from './pages/SeriesDetail';
+import { SermonPage } from './pages/SermonPage';
 import { PastorDetail } from './pages/PastorDetail';
 import { Devotional } from './pages/Devotional';
 import { Bible } from './pages/Bible';
@@ -22,11 +23,13 @@ export default function App() {
               <Route index element={<Home />} />
               <Route path="sermons" element={<Sermons />} />
               <Route path="series/:id" element={<SeriesDetail />} />
+              <Route path="sermon/:id" element={<SermonPage />} />
               <Route path="pastor/:id" element={<PastorDetail />} />
               <Route path="devotional" element={<Devotional />} />
               <Route path="bible" element={<Bible />} />
               <Route path="music" element={<Music />} />
-              <Route path="give" element={<Give />} />
+              <Route path="support" element={<Give />} />
+              <Route path="give" element={<Navigate to="/support" replace />} />
               <Route path="admin" element={<AdminPage />} />
               <Route
                 path="*"

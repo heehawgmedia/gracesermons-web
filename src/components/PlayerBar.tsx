@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import { PLAYBACK_RATES, usePlayer } from '../player/PlayerContext';
 import { formatDuration } from '../lib/api';
 import { fallbackCover } from '../lib/images';
+import { ShareButton } from './ShareButton';
 
 /** Persistent bottom playback bar, shown whenever a sermon is loaded. */
 export function PlayerBar() {
@@ -28,7 +30,11 @@ export function PlayerBar() {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
-            <p className="truncate text-sm font-semibold">{current.title}</p>
+            <p className="truncate text-sm font-semibold">
+              <Link to={`/sermon/${current.id}`} className="hover:underline">
+                {current.title}
+              </Link>
+            </p>
             {queueLabel && (
               <span className="hidden shrink-0 text-[11px] text-stone-400 sm:inline">
                 {queueLabel} ({idx + 1}/{queue.length})
@@ -57,6 +63,9 @@ export function PlayerBar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
+          <div className="hidden sm:block [&>button]:bg-transparent [&>button]:text-stone-600 [&>button:hover]:bg-stone-100">
+            <ShareButton sermon={current} pastorName={player.pastorName(current)} />
+          </div>
           <button
             onClick={cycleRate}
             className="hidden w-11 rounded-full border border-stone-300 px-2 py-1 text-xs font-semibold text-stone-600 hover:bg-stone-100 sm:block"
