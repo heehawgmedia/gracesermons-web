@@ -13,7 +13,10 @@ export function formatDuration(seconds: number): string {
 }
 
 export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
+  // Date-only strings parse as UTC midnight, which renders as the previous
+  // day in US timezones — pin them to local midnight instead.
+  const normalized = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? `${dateStr}T00:00:00` : dateStr;
+  const date = new Date(normalized);
   if (Number.isNaN(date.getTime())) return dateStr;
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
