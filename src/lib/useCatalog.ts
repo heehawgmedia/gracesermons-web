@@ -4,6 +4,8 @@ import type { Pastor, Sermon, SermonSeries } from './types';
 /** Sermon catalog (sermons + pastors + series) fetched once and shared. */
 export interface Catalog {
   sermons: Sermon[];
+  /** Rows tagged topic "Special Music" — shown on the Music page, not the library. */
+  music: Sermon[];
   pastors: Pastor[];
   series: SermonSeries[];
   loading: boolean;

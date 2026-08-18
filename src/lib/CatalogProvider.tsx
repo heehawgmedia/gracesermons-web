@@ -32,7 +32,8 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Catalog>(
     () => ({
-      sermons,
+      sermons: sermons.filter((s) => s.topic !== 'Special Music'),
+      music: sermons.filter((s) => s.topic === 'Special Music'),
       pastors,
       series,
       loading,

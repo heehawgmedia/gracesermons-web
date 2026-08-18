@@ -1,5 +1,8 @@
 import { IMAGES } from '../lib/images';
 import { PageHero } from './Sermons';
+import { useCatalog } from '../lib/useCatalog';
+import { usePlayer } from '../player/PlayerContext';
+import { formatDuration } from '../lib/api';
 
 interface MusicTrack {
   id: string;
@@ -26,15 +29,63 @@ const TRACKS: MusicTrack[] = [
 ];
 
 export function Music() {
+  const { music, pastorById } = useCatalog();
+  const player = usePlayer();
+
   return (
     <>
       <PageHero
         image={IMAGES.lake}
         title="Worship Music"
-        subtitle="Hymns of the faith — audio coming soon."
+        subtitle="Special music from our services, and hymns of the faith."
       />
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
-        <ol className="mt-10 mb-4 divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+        {music.length > 0 && (
+          <>
+            <h2 className="font-display mt-10 text-xl font-semibold text-forest-800">
+              Special Music
+            </h2>
+            <ol className="mt-4 divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+              {music.map((track) => {
+                const isCurrent = player.current?.id === track.id;
+                return (
+                  <li key={track.id}>
+                    <button
+                      onClick={() =>
+                        track.audioUrl && player.play(track, music, 'Special Music')
+                      }
+                      className="flex w-full items-center gap-4 px-5 py-3.5 text-left transition hover:bg-forest-50"
+                    >
+                      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-gold-400 text-forest-900">
+                        {isCurrent && player.isPlaying ? (
+                          <svg className="size-5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+                          </svg>
+                        ) : (
+                          <svg className="size-5 translate-x-0.5" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold">{track.title}</span>
+                        <span className="block truncate text-xs text-stone-500">
+                          {pastorById(track.pastorId)?.name ?? ''}
+                        </span>
+                      </span>
+                      <span className="text-xs tabular-nums text-stone-400">
+                        {formatDuration(track.duration)}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </>
+        )}
+
+        <h2 className="font-display mt-10 text-xl font-semibold text-forest-800">Hymns</h2>
+        <ol className="mt-4 mb-4 divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
           {TRACKS.map((t) => (
             <li key={t.id} className="flex items-center gap-4 px-5 py-3.5">
               <span className="grid size-10 shrink-0 place-items-center rounded-full bg-forest-50 text-forest-700">
