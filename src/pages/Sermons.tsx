@@ -14,6 +14,13 @@ export function Sermons() {
 
   const playable = useMemo(() => sermons.filter((s) => s.audioUrl), [sermons]);
 
+  // Only people with sermons in the library count as preachers — music-only
+  // artists (e.g. special-music singers) stay off this list.
+  const preachers = useMemo(
+    () => pastors.filter((p) => sermons.some((s) => s.pastorId === p.id)),
+    [pastors, sermons]
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return sermons.filter((s) => {
@@ -38,7 +45,7 @@ export function Sermons() {
             [
               ['sermons', `Sermons (${sermons.length})`],
               ['series', `Series (${series.length})`],
-              ['pastors', `Preachers (${pastors.length})`],
+              ['pastors', `Preachers (${preachers.length})`],
             ] as [Tab, string][]
           ).map(([key, label]) => (
             <button
@@ -71,7 +78,7 @@ export function Sermons() {
                 className="rounded-full border border-stone-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-forest-600"
               >
                 <option value="">All preachers</option>
-                {pastors.map((p) => (
+                {preachers.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
@@ -136,7 +143,7 @@ export function Sermons() {
 
         {tab === 'pastors' && (
           <div className="mt-8 grid gap-6 pb-4 sm:grid-cols-2 lg:grid-cols-3">
-            {pastors.map((p) => (
+            {preachers.map((p) => (
               <Link
                 key={p.id}
                 to={`/pastor/${p.id}`}
