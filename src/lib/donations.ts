@@ -15,9 +15,13 @@ export interface MonthlyTier {
 
 export const DONATIONS = {
   /** Payment link with customer-chosen amount (one-time). */
-  oneTime: '',
+  oneTime: 'https://buy.stripe.com/fZu9AM2Vq0ci60Xaib48007',
   /** Fixed-amount monthly links, lowest to highest. */
-  monthly: [] as MonthlyTier[],
+  monthly: [
+    { amount: 10, url: 'https://buy.stripe.com/bJe3co1RmbV0cpl61V48008' },
+    { amount: 25, url: 'https://buy.stripe.com/28E6oA1Rm5wC4WT8a348009' },
+    { amount: 50, url: 'https://buy.stripe.com/4gM7sE1RmcZ43SP2PJ4800a' },
+  ] as MonthlyTier[],
 };
 
 export const ONE_TIME_PRESETS = [10, 25, 50, 100];
