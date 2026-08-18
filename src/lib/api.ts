@@ -13,6 +13,8 @@ export function formatDuration(seconds: number): string {
 }
 
 export function formatDate(dateStr: string): string {
+  // Sentinel date for archive recordings whose real date is unknown.
+  if (dateStr?.startsWith('1970-01-01')) return 'Archive';
   // Date-only strings parse as UTC midnight, which renders as the previous
   // day in US timezones — pin them to local midnight instead.
   const normalized = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) ? `${dateStr}T00:00:00` : dateStr;
