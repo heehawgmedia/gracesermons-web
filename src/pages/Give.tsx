@@ -112,7 +112,13 @@ export function Give() {
             )}
 
             <p className="mt-6 text-center text-xs text-stone-400">
-              Payments are processed securely by Stripe. Grace Sermons never sees your card details.
+              A payment to Grace Sermons will appear on your statement.
+            </p>
+            <p className="mt-1 text-center text-xs text-stone-400">
+              Questions about giving?{' '}
+              <a href="mailto:contact@gracesermons.org" className="text-forest-600 hover:underline">
+                contact@gracesermons.org
+              </a>
             </p>
           </div>
         )}

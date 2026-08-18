@@ -12,6 +12,11 @@ export function Footer() {
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-stone-400">
             Christ-focused Baptist sermons, devotionals, and worship — free to listen, anytime.
           </p>
+          <p className="mt-4 text-sm">
+            <a href="mailto:contact@gracesermons.org" className="text-gold-300 hover:text-gold-400">
+              contact@gracesermons.org
+            </a>
+          </p>
         </div>
         <div>
           <h3 className="text-xs font-semibold tracking-widest text-gold-400 uppercase">Listen</h3>
