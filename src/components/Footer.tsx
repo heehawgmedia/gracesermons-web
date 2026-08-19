@@ -46,7 +46,10 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-4 text-center text-xs text-stone-500">
-        © {new Date().getFullYear()} Grace Sermons · <Link to="/admin" className="hover:text-stone-300">Admin</Link>
+        {/* The copyright itself is the (unadvertised) door to the admin area. */}
+        <Link to="/admin" className="cursor-default">
+          © {new Date().getFullYear()} Grace Sermons
+        </Link>
         {visits !== null && <> · {visits.toLocaleString()} visits</>}
       </div>
     </footer>
