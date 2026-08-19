@@ -32,6 +32,11 @@ Options -Indexes
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
+  # The service worker and manifest must always revalidate — a long-cached
+  # sw.js pins every installed PWA to an old build.
+  <FilesMatch "^(sw\.js|registerSW\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
 </IfModule>
 
 # Compression
