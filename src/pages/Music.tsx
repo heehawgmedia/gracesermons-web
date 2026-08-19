@@ -52,7 +52,9 @@ export function Music() {
                   <li key={track.id}>
                     <button
                       onClick={() =>
-                        track.audioUrl && player.play(track, music, 'Special Music')
+                        isCurrent
+                          ? player.toggle()
+                          : track.audioUrl && player.play(track, music, 'Special Music')
                       }
                       className="flex w-full items-center gap-4 px-5 py-3.5 text-left transition hover:bg-forest-50"
                     >

@@ -39,7 +39,11 @@ export function Home() {
           <div className="mt-7 flex flex-wrap items-center gap-3">
             {playable.length > 0 && (
               <button
-                onClick={() => player.play(playable[0], playable, 'All Sermons')}
+                onClick={() =>
+                  player.current?.id === playable[0].id
+                    ? player.toggle()
+                    : player.play(playable[0], playable, 'All Sermons')
+                }
                 className="flex items-center gap-2 rounded-full bg-gold-400 px-6 py-3 text-sm font-semibold text-forest-900 shadow-lg transition hover:bg-gold-300"
               >
                 <svg className="size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -112,7 +116,11 @@ export function Home() {
               {popular.map((sermon, i) => (
                 <li key={sermon.id}>
                   <button
-                    onClick={() => sermon.audioUrl && player.play(sermon, playable, 'Most Played')}
+                    onClick={() =>
+                      player.current?.id === sermon.id
+                        ? player.toggle()
+                        : sermon.audioUrl && player.play(sermon, playable, 'Most Played')
+                    }
                     className="flex w-full items-center gap-4 px-4 py-3 text-left transition hover:bg-forest-50 sm:px-6"
                   >
                     <span className="font-display w-6 shrink-0 text-lg font-semibold text-gold-500">

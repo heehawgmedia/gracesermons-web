@@ -33,7 +33,9 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
         </div>
         {playable && (
           <button
-            onClick={() => player.play(sermon, queue, queueLabel)}
+            onClick={() =>
+              isCurrent ? player.toggle() : player.play(sermon, queue, queueLabel)
+            }
             aria-label={`Play ${sermon.title}`}
             className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-gold-400 text-forest-900 opacity-95 shadow-lg transition-transform hover:scale-105"
           >
