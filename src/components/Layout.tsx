@@ -3,6 +3,7 @@ import { VerseMarquee } from './VerseMarquee';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { PlayerBar } from './PlayerBar';
+import { BackToTop } from './BackToTop';
 import { usePlayer } from '../player/PlayerContext';
 
 export function Layout() {
@@ -15,6 +16,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <BackToTop />
       <PlayerBar />
     </div>
   );

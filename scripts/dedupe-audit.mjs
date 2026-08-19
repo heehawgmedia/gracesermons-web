@@ -22,11 +22,13 @@ const env = Object.fromEntries(
 const supabase = createClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY);
 const APPLY = process.argv.includes('--apply');
 
+// Digits and "part" are load-bearing — series episodes differ only by them.
 const norm = (s) =>
   s.toLowerCase()
-    .replace(/\(\d+\)/g, '')
+    .replace(/\(\d+\)\s*$/g, '')
     .replace(/[^a-z0-9 ]+/g, ' ')
-    .replace(/\b(a|an|the|part|pt)\b/g, ' ')
+    .replace(/\b(a|an|the)\b/g, ' ')
+    .replace(/\bpt\b/g, 'part')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -72,10 +74,13 @@ for (const list of byPastor.values()) {
       const d = editDistance(na, nb);
       if (d > 2) continue;
       const da = a.duration || 0, db = b.duration || 0;
-      const durAgree = da > 0 && db > 0 ? Math.abs(da - db) / Math.max(da, db) <= 0.1 : null;
+      // Legacy rows carry duration 0 — treat as "unknown", not "different".
+      const durAgree = da > 0 && db > 0 ? Math.abs(da - db) / Math.max(da, db) <= 0.02 : null;
       const [keep, drop] = keeper(a, b);
-      const pair = { keep: keep.title, drop: drop.title, dropId: drop.id, editDist: d, durA: da, durB: db };
-      if (d === 0 || durAgree === true) confident.push(pair);
+      const pair = { keep: keep.title, drop: drop.title, dropId: drop.id, editDist: d, durA: keep.duration, durB: drop.duration };
+      // Auto-delete only exact normalized-title matches whose durations agree
+      // (or can't be compared). Near-matches are reported, never deleted.
+      if (d === 0 && durAgree !== false) confident.push(pair);
       else uncertain.push(pair);
     }
   }
