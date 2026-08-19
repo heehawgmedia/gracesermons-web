@@ -8,7 +8,10 @@ export function SeriesDetail() {
   const { id = '' } = useParams();
   const { series, sermons, pastorById, loading } = useCatalog();
   const s = series.find((x) => x.id === id);
-  const inSeries = sermons.filter((x) => x.seriesId === id);
+  // Episodes read best oldest-first (chapter/part order for studies).
+  const inSeries = sermons
+    .filter((x) => x.seriesId === id)
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
   const playable = inSeries.filter((x) => x.audioUrl);
 
   if (loading) return <p className="py-24 text-center text-stone-400">Loading…</p>;
