@@ -24,7 +24,9 @@ export function BackToTop() {
 
   return (
     <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      // Instant jump: smooth scrolling stalls on long pages when lazy-loaded
+      // images above the viewport shift layout mid-animation.
+      onClick={() => window.scrollTo({ top: 0, behavior: 'auto' })}
       aria-label="Back to top"
       className={`fixed right-5 z-40 grid size-12 place-items-center rounded-full bg-forest-700 text-white shadow-lg transition hover:bg-forest-600 ${
         current ? 'bottom-24' : 'bottom-6'

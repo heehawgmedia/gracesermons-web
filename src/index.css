@@ -18,10 +18,6 @@
   --color-gold-500: #c08a3e;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   @apply bg-paper text-ink font-sans antialiased;
 }
