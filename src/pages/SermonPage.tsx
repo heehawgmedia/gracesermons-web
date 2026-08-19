@@ -6,6 +6,7 @@ import { formatDate, formatDuration } from '../lib/api';
 import { fallbackCover } from '../lib/images';
 import { SermonCard } from '../components/SermonCard';
 import { ShareButton } from '../components/ShareButton';
+import { DownloadButton } from '../components/DownloadButton';
 
 /** Shareable landing page for a single message. */
 export function SermonPage() {
@@ -103,6 +104,9 @@ export function SermonPage() {
             )}
             <div className="[&>button]:border-white/40 [&>button]:text-white [&>button:hover]:bg-white/10 [&>button:hover]:border-white/60">
               <ShareButton sermon={sermon} pastorName={pastor?.name ?? 'Grace Sermons'} variant="labeled" />
+            </div>
+            <div className="[&>button]:border-white/40 [&>button]:text-white [&>button:hover]:bg-white/10 [&>button:hover]:border-white/60">
+              <DownloadButton sermon={sermon} pastorName={pastor?.name ?? 'Grace Sermons'} variant="labeled" />
             </div>
           </div>
         </div>

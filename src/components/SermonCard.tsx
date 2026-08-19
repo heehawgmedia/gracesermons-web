@@ -4,6 +4,7 @@ import { fallbackCover } from '../lib/images';
 import type { Sermon } from '../lib/types';
 import { usePlayer } from '../player/PlayerContext';
 import { ShareButton } from './ShareButton';
+import { DownloadButton } from './DownloadButton';
 
 interface Props {
   sermon: Sermon;
@@ -28,8 +29,9 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex flex-col gap-2">
           <ShareButton sermon={sermon} pastorName={pastorName} />
+          {playable && <DownloadButton sermon={sermon} pastorName={pastorName} />}
         </div>
         {playable && (
           <button
