@@ -197,14 +197,16 @@ for (const item of plan) {
   try {
     const { duration, bitrate } = probe(item.full);
     if (duration < 60) { failed++; log({ phase: 'reject', file: item.safeName, reason: `too short (${duration.toFixed(0)}s)` }); continue; }
+    const REPAIR = process.env.REPAIR === '1';
     const dec = await verifyDecodes(item.full);
-    if (!dec.ok) { failed++; log({ phase: 'reject', file: item.safeName, reason: 'decode errors', detail: dec.detail }); continue; }
+    if (!dec.ok && !REPAIR) { failed++; log({ phase: 'reject', file: item.safeName, reason: 'decode errors', detail: dec.detail }); continue; }
     const sil = await verifyNotSilent(item.full, duration);
     if (!sil.ok) { failed++; log({ phase: 'reject', file: item.safeName, reason: `near-silent (mean ${sil.mean}dB)` }); continue; }
 
     let uploadPath = item.full;
     let recompressed = false;
-    if (bitrate > BITRATE_KEEP_MAX) {
+    // Repair mode: a fresh decode+encode drops the damaged frames.
+    if (bitrate > BITRATE_KEEP_MAX || (REPAIR && !dec.ok)) {
       const tmp = join(tmpdir(), 'archive-recode.mp3');
       execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', item.full, ...TARGET, tmp]);
       uploadPath = tmp;
