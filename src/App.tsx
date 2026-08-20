@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { PlayerProvider } from './player/PlayerContext';
 import { CatalogProvider } from './lib/CatalogProvider';
@@ -12,6 +13,9 @@ import { Bible } from './pages/Bible';
 import { Music } from './pages/Music';
 import { Give } from './pages/Give';
 import { AdminPage } from './pages/admin/AdminPage';
+
+// The reach map carries ~100KB of world geometry — loaded only when visited.
+const Reach = lazy(() => import('./pages/Reach'));
 
 export default function App() {
   return (
@@ -29,6 +33,14 @@ export default function App() {
               <Route path="bible" element={<Bible />} />
               <Route path="music" element={<Music />} />
               <Route path="support" element={<Give />} />
+              <Route
+                path="reach"
+                element={
+                  <Suspense fallback={<p className="py-24 text-center text-stone-400">Loading map…</p>}>
+                    <Reach />
+                  </Suspense>
+                }
+              />
               <Route path="give" element={<Navigate to="/support" replace />} />
               <Route path="admin" element={<AdminPage />} />
               <Route

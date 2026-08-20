@@ -27,6 +27,7 @@ export function Footer() {
             <li><Link to="/devotional" className="hover:text-white">Daily Devotional</Link></li>
             <li><Link to="/bible" className="hover:text-white">Read the Bible</Link></li>
             <li><Link to="/music" className="hover:text-white">Worship Music</Link></li>
+            <li><Link to="/reach" className="hover:text-white">Global Reach</Link></li>
           </ul>
         </div>
         <div>

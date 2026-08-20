@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Sermon } from '../lib/types';
+import { recordDownload } from '../lib/metrics';
 
 interface Props {
   sermon: Sermon;
@@ -38,6 +39,7 @@ export function DownloadButton({ sermon, pastorName, variant = 'icon' }: Props) 
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      void recordDownload(sermon.id);
       setPhase('done');
       setTimeout(() => setPhase('idle'), 2500);
     } catch {

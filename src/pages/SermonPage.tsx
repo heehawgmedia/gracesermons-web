@@ -11,7 +11,7 @@ import { DownloadButton } from '../components/DownloadButton';
 /** Shareable landing page for a single message. */
 export function SermonPage() {
   const { id = '' } = useParams();
-  const { sermons, music, pastorById, seriesById, loading } = useCatalog();
+  const { sermons, music, pastorById, seriesById, loading, downloadsFor, sharesFor } = useCatalog();
   const player = usePlayer();
 
   const sermon = sermons.find((s) => s.id === id) ?? music.find((s) => s.id === id);
@@ -77,6 +77,10 @@ export function SermonPage() {
           {sermon.scripture && (
             <p className="mt-2 text-sm font-medium text-gold-300">{sermon.scripture}</p>
           )}
+          <p className="mt-2 text-xs text-stone-300">
+            {sermon.playCount.toLocaleString()} plays · {downloadsFor(sermon.id).toLocaleString()}{' '}
+            downloads · {sharesFor(sermon.id).toLocaleString()} shares
+          </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
             {sermon.audioUrl && (
               <button

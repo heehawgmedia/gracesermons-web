@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
+import { detectCountry, recordCountry } from './metrics';
 
 // The visit counter lives in a hidden sermons row (topic "__meta__") so it can
 // use the backend's atomic increment_sermon_play_count RPC — no new tables,
-// no lost updates. Counted once per browser session.
+// no lost updates. Counted once per browser session, along with a
+// country-level (never personal) mark for the Global Reach map.
 
 const SESSION_KEY = 'gs_visit_recorded';
 
@@ -18,6 +20,7 @@ export function useVisitCount(): number | null {
           .from('sermons')
           .select('id, play_count')
           .eq('topic', '__meta__')
+          .eq('title', '__site_visits__')
           .limit(1);
         const row = data?.[0];
         if (!row) return;
@@ -28,6 +31,10 @@ export function useVisitCount(): number | null {
             sermon_uuid: row.id,
           });
           if (!error) current += 1;
+          // Fire-and-forget country mark for the reach map.
+          void detectCountry().then((iso2) => {
+            if (iso2) void recordCountry(iso2);
+          });
         }
         if (!cancelled) setCount(current);
       } catch {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Sermon } from '../lib/types';
+import { recordShare } from '../lib/metrics';
 
 interface Props {
   sermon: Sermon;
@@ -27,6 +28,7 @@ export function ShareButton({ sermon, pastorName, variant = 'icon' }: Props) {
     if (navigator.share) {
       try {
         await navigator.share(payload);
+        void recordShare(sermon.id);
         return;
       } catch {
         // User dismissed the sheet, or share failed — fall through to copy.
@@ -34,6 +36,7 @@ export function ShareButton({ sermon, pastorName, variant = 'icon' }: Props) {
     }
     try {
       await navigator.clipboard.writeText(url);
+      void recordShare(sermon.id);
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch {

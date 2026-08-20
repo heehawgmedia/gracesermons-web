@@ -13,6 +13,12 @@ export interface Catalog {
   refresh: () => void;
   pastorById: (id: string) => Pastor | undefined;
   seriesById: (id: string) => SermonSeries | undefined;
+  /** Times a message was downloaded (from hidden metric rows). */
+  downloadsFor: (sermonId: string) => number;
+  /** Times a message was shared. */
+  sharesFor: (sermonId: string) => number;
+  /** Visits per ISO-3166 alpha-2 country code, for the reach map. */
+  countries: Record<string, number>;
 }
 
 export const CatalogContext = createContext<Catalog | null>(null);

@@ -30,8 +30,22 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     refresh();
   }, [refresh]);
 
-  const value = useMemo<Catalog>(
-    () => ({
+  const value = useMemo<Catalog>(() => {
+    // Hidden metric rows ride along in the same fetch: __dl__<id>, __sh__<id>,
+    // __country_XX__ — their play_count is the metric value.
+    const downloads = new Map<string, number>();
+    const shares = new Map<string, number>();
+    const countries: Record<string, number> = {};
+    for (const s of sermons) {
+      if (s.topic !== '__meta__') continue;
+      let m = s.title.match(/^__dl__(.+)$/);
+      if (m) downloads.set(m[1], (downloads.get(m[1]) ?? 0) + s.playCount);
+      else if ((m = s.title.match(/^__sh__(.+)$/)))
+        shares.set(m[1], (shares.get(m[1]) ?? 0) + s.playCount);
+      else if ((m = s.title.match(/^__country_([A-Z]{2})__$/)))
+        countries[m[1]] = (countries[m[1]] ?? 0) + s.playCount;
+    }
+    return {
       sermons: sermons.filter((s) => s.topic !== 'Special Music' && s.topic !== '__meta__'),
       music: sermons.filter((s) => s.topic === 'Special Music'),
       pastors,
@@ -41,9 +55,11 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       refresh,
       pastorById: (id) => pastors.find((p) => p.id === id),
       seriesById: (id) => series.find((s) => s.id === id),
-    }),
-    [sermons, pastors, series, loading, error, refresh]
-  );
+      downloadsFor: (id) => downloads.get(id) ?? 0,
+      sharesFor: (id) => shares.get(id) ?? 0,
+      countries,
+    };
+  }, [sermons, pastors, series, loading, error, refresh]);
 
   return <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>;
 }
