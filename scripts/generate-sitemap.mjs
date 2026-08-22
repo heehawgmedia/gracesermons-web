@@ -41,7 +41,9 @@ const sermonIds = new Set();
 for (const s of sermons) {
   if (HIDDEN_TOPICS.has(s.topic)) continue;
   sermonIds.add(s.id);
-  const d = typeof s.date === 'string' && !s.date.startsWith('1970') ? s.date.slice(0, 10) : (s.created_at ?? '').slice(0, 10) || null;
+  // lastmod = when the page was published (upload time), not the sermon's
+  // recording date — Google rejects pre-1970 recording dates as "invalid".
+  const d = (s.created_at ?? '').slice(0, 10) || today;
   lines.push(url(`/sermon/${s.id}`, d, '0.8', 'monthly'));
 }
 for (const s of series) lines.push(url(`/series/${s.id}`, null, '0.6', 'weekly'));
