@@ -79,7 +79,7 @@ export default function Reach() {
     <>
       <PageHero
         image={IMAGES.hero}
-        title="Global Reach"
+        title="Gospel Reach Map"
         subtitle="Where these messages are being heard around the world."
       />
       <div className="mx-auto max-w-5xl px-4 sm:px-6">

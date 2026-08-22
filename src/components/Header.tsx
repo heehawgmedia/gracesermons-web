@@ -7,6 +7,7 @@ const NAV = [
   { to: '/devotional', label: 'Devotional' },
   { to: '/bible', label: 'Bible' },
   { to: '/music', label: 'Music' },
+  { to: '/reach', label: 'Reach Map' },
   { to: '/support', label: 'Support' },
 ];
 

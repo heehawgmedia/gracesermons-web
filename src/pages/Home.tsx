@@ -12,7 +12,8 @@ export function Home() {
   const verse = verseOfTheDay();
 
   const recent = sermons.slice(0, 8);
-  const popular = [...sermons].sort((a, b) => b.playCount - a.playCount).slice(0, 5);
+  // Top 10 by play count, ranked.
+  const popular = [...sermons].sort((a, b) => b.playCount - a.playCount).slice(0, 10);
   const playable = sermons.filter((s) => s.audioUrl);
 
   return (
@@ -111,7 +112,7 @@ export function Home() {
 
           {/* Popular */}
           <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
-            <h2 className="font-display text-2xl font-semibold text-forest-800">Most Played</h2>
+            <h2 className="font-display text-2xl font-semibold text-forest-800">Top 10 Most Played</h2>
             <ol className="mt-6 divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
               {popular.map((sermon, i) => (
                 <li key={sermon.id}>
