@@ -3,6 +3,7 @@ import { formatDate, formatDuration } from '../lib/api';
 import { fallbackCover } from '../lib/images';
 import type { Sermon } from '../lib/types';
 import { usePlayer } from '../player/PlayerContext';
+import { useCatalog } from '../lib/useCatalog';
 import { ShareButton } from './ShareButton';
 import { DownloadButton } from './DownloadButton';
 
@@ -16,6 +17,9 @@ interface Props {
 
 export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
   const player = usePlayer();
+  const { downloadsFor, sharesFor } = useCatalog();
+  const downloads = downloadsFor(sermon.id);
+  const shares = sharesFor(sermon.id);
   const isCurrent = player.current?.id === sermon.id;
   const playable = Boolean(sermon.audioUrl);
 
@@ -64,6 +68,13 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
         </h3>
         <p className="mt-1 text-sm text-stone-500">
           {pastorName} · {formatDate(sermon.date)}
+          {(downloads > 0 || shares > 0) && (
+            <span className="block text-xs text-stone-400">
+              {downloads > 0 && `${downloads.toLocaleString()} download${downloads === 1 ? '' : 's'}`}
+              {downloads > 0 && shares > 0 && ' · '}
+              {shares > 0 && `${shares.toLocaleString()} share${shares === 1 ? '' : 's'}`}
+            </span>
+          )}
         </p>
         {sermon.scripture && (
           <p className="mt-1.5 text-xs font-medium text-gold-500">{sermon.scripture}</p>

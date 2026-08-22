@@ -11,10 +11,27 @@ interface Props {
 
 type Phase = 'idle' | 'busy' | 'done' | 'error';
 
+// Human date for filenames. Imported archive dates use day "01" when only the
+// month was known and "01-01" when only the year was known, so those render as
+// "Sep 2015" / "1977" rather than a false-precision day. 1970-* is the
+// "unknown" sentinel and adds nothing.
+function dateLabel(date: string): string | null {
+  if (!date || date.startsWith('1970-')) return null;
+  const iso = date.slice(0, 10);
+  const [y, m, d] = iso.split('-');
+  if (m === '01' && d === '01') return y;
+  const dt = new Date(`${iso}T00:00:00`);
+  if (Number.isNaN(dt.getTime())) return null;
+  if (d === '01') return dt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
 function fileNameFor(sermon: Sermon, pastorName: string): string {
   const ext = /\.(m4a|wav)(\?|$)/i.exec(sermon.audioUrl ?? '')?.[1]?.toLowerCase() ?? 'mp3';
   const raw = sermon.title.includes(pastorName) ? sermon.title : `${sermon.title} - ${pastorName}`;
-  return `${raw.replace(/[\\/:*?"<>|]/g, '').trim()}.${ext}`;
+  const when = dateLabel(sermon.date);
+  const base = when ? `${raw} (${when})` : raw;
+  return `${base.replace(/[\\/:*?"<>|]/g, '').trim()}.${ext}`;
 }
 
 export function DownloadButton({ sermon, pastorName, variant = 'icon' }: Props) {
