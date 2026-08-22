@@ -34,7 +34,8 @@ body {
 }
 
 .marquee-track {
-  animation: marquee 90s linear infinite;
+  /* ~36 verses per loop; long duration = slow, readable glide. */
+  animation: marquee 420s linear infinite;
 }
 
 .marquee-track:hover {
