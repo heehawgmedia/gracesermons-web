@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { PlayerProvider } from './player/PlayerContext';
 import { CatalogProvider } from './lib/CatalogProvider';
 import { Layout } from './components/Layout';
+import { RouteMeta } from './components/RouteMeta';
 import { Home } from './pages/Home';
 import { Sermons } from './pages/Sermons';
 import { SeriesDetail } from './pages/SeriesDetail';
@@ -22,6 +23,7 @@ export default function App() {
     <BrowserRouter>
       <PlayerProvider>
         <CatalogProvider>
+          <RouteMeta />
           <Routes>
             <Route element={<Layout />}>
               <Route index element={<Home />} />
