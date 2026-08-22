@@ -92,7 +92,7 @@ const pastorCache = new Map();
 
 for (const entry of manifest) {
   const fileName = sanitize(basename(entry.file));
-  const storagePath = `audio/${fileName}`;
+  const storagePath = `${entry.folder ?? 'audio'}/${fileName}`;
   console.log(`\n${basename(entry.file)}`);
 
   const buffer = readFileSync(entry.file);

@@ -45,9 +45,13 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       else if ((m = s.title.match(/^__country_([A-Z]{2})__$/)))
         countries[m[1]] = (countries[m[1]] ?? 0) + s.playCount;
     }
+    const MUSIC_TOPICS = new Set(['Special Music', 'Instrumental Hymn', '__meta__']);
     return {
-      sermons: sermons.filter((s) => s.topic !== 'Special Music' && s.topic !== '__meta__'),
+      sermons: sermons.filter((s) => !MUSIC_TOPICS.has(s.topic)),
       music: sermons.filter((s) => s.topic === 'Special Music'),
+      hymns: sermons
+        .filter((s) => s.topic === 'Instrumental Hymn')
+        .sort((a, b) => a.title.localeCompare(b.title)),
       pastors,
       series,
       loading,

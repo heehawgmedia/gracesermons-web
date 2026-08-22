@@ -6,6 +6,8 @@ export interface Catalog {
   sermons: Sermon[];
   /** Rows tagged topic "Special Music" — shown on the Music page, not the library. */
   music: Sermon[];
+  /** Rows tagged topic "Instrumental Hymn" — royalty-free hymn instrumentals on the Music page. */
+  hymns: Sermon[];
   pastors: Pastor[];
   series: SermonSeries[];
   loading: boolean;
