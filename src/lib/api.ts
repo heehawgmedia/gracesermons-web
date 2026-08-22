@@ -53,6 +53,7 @@ function mapSermon(s: any): Sermon {
     audioUrl: s.audio_url,
     coverImage: s.cover_image,
     playCount: s.play_count ?? 0,
+    createdAt: s.created_at ?? "",
   };
 }
 

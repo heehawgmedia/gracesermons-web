@@ -12,7 +12,7 @@ export function Give() {
   return (
     <>
       <PageHero
-        image={IMAGES.wheat}
+        image={IMAGES.sunrise}
         title="Support"
         subtitle="Support the ministry — every gift helps keep these sermons free for everyone."
       />

@@ -33,6 +33,8 @@ export interface Sermon {
   audioUrl: string | null;
   coverImage: string | null;
   playCount: number;
+  /** Row creation time (upload) — drives "Recently Added". */
+  createdAt: string;
 }
 
 // Spurgeon's Morning & Evening — keyed by month/day + period.

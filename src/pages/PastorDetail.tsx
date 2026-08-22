@@ -26,7 +26,7 @@ export function PastorDetail() {
   return (
     <>
       <PageHero
-        image={IMAGES.lake}
+        image={IMAGES.valley}
         title={pastor.name}
         subtitle={[pastor.church, pastor.location].filter(Boolean).join(' · ')}
       />

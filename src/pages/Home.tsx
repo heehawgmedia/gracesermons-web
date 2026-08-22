@@ -11,7 +11,8 @@ export function Home() {
   const player = usePlayer();
   const verse = verseOfTheDay();
 
-  const recent = sermons.slice(0, 8);
+  // Most recently *uploaded* (not the sermon's preached date).
+  const recent = [...sermons].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 8);
   // Top 10 by play count, ranked.
   const popular = [...sermons].sort((a, b) => b.playCount - a.playCount).slice(0, 10);
   const playable = sermons.filter((s) => s.audioUrl);

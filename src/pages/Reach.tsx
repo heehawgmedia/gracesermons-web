@@ -78,7 +78,7 @@ export default function Reach() {
   return (
     <>
       <PageHero
-        image={IMAGES.hero}
+        image={IMAGES.aurora}
         title="Gospel Reach Map"
         subtitle="Where these messages are being heard around the world."
       />
