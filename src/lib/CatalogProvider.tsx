@@ -4,6 +4,9 @@ import { CatalogContext, type Catalog } from './useCatalog';
 import type { Pastor, Sermon, SermonSeries } from './types';
 import { usePlayer } from '../player/PlayerContext';
 
+// Alphabetical key that ignores leading punctuation ('Tis So Sweet → Tis So Sweet).
+const sortKey = (t: string) => t.replace(/^[^a-z0-9]+/i, "");
+
 export function CatalogProvider({ children }: { children: ReactNode }) {
   const [sermons, setSermons] = useState<Sermon[]>([]);
   const [pastors, setPastors] = useState<Pastor[]>([]);
@@ -51,7 +54,7 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       music: sermons.filter((s) => s.topic === 'Special Music'),
       hymns: sermons
         .filter((s) => s.topic === 'Instrumental Hymn')
-        .sort((a, b) => a.title.localeCompare(b.title)),
+        .sort((a, b) => sortKey(a.title).localeCompare(sortKey(b.title))),
       pastors,
       series,
       loading,
