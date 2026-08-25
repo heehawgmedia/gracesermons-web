@@ -46,6 +46,14 @@ export default function Reach() {
   const { paths, width, height } = useMemo(() => {
     const world = worldData as unknown as Topology<{ countries: GeometryCollection }>;
     const fc = feature(world, world.objects.countries) as unknown as FeatureCollection<Geometry, { name: string }>;
+    // Natural Earth merges French Guiana (South America) into the France shape;
+    // keep only France's European rings so a visit from France doesn't light up
+    // a patch of South America.
+    for (const f of fc.features) {
+      if (f.properties.name === 'France' && f.geometry.type === 'MultiPolygon') {
+        f.geometry.coordinates = f.geometry.coordinates.filter((poly) => poly[0][0][0] > -30);
+      }
+    }
     const w = 960;
     const h = 500;
     const projection = geoNaturalEarth1().fitSize([w, h], { type: 'Sphere' } as never);
