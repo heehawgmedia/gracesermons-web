@@ -130,6 +130,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       }));
       updateMediaSession(sermon);
       void incrementPlayCount(sermon.id);
+      // Let the catalog bump its in-memory count so rankings adjust live.
+      window.dispatchEvent(new CustomEvent('gs:played', { detail: sermon.id }));
     },
     [updateMediaSession]
   );

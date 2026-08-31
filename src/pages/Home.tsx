@@ -20,14 +20,14 @@ export function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative isolate min-h-[420px] overflow-hidden sm:min-h-[520px]">
+      <section className="relative isolate min-h-[380px] overflow-hidden sm:min-h-[520px]">
         <img
           src={IMAGES.hero}
           alt="Misty mountains at sunrise"
           className="absolute inset-0 -z-10 size-full object-cover"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-900/90 via-forest-900/40 to-black/20" />
-        <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pt-32 pb-14 sm:px-6 sm:pt-44">
+        <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pt-24 pb-12 sm:px-6 sm:pt-44 sm:pb-14">
           <p className="text-xs font-semibold tracking-[0.25em] text-gold-300 uppercase">
             Christ Focused Sermons. Anytime.
           </p>
@@ -140,7 +140,7 @@ export function Home() {
                         {pastorById(sermon.pastorId)?.name} · {formatDuration(sermon.duration)}
                       </span>
                     </span>
-                    <span className="hidden text-xs text-stone-400 sm:block">
+                    <span className="shrink-0 text-xs tabular-nums text-stone-400">
                       {sermon.playCount.toLocaleString()} plays
                     </span>
                   </button>

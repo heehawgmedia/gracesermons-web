@@ -33,6 +33,19 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     refresh();
   }, [refresh]);
 
+  // Live-bump play counts on each listen so "Top 10 Most Played" re-ranks
+  // without waiting for a reload.
+  useEffect(() => {
+    const onPlayed = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      setSermons((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, playCount: s.playCount + 1 } : s))
+      );
+    };
+    window.addEventListener('gs:played', onPlayed);
+    return () => window.removeEventListener('gs:played', onPlayed);
+  }, []);
+
   const value = useMemo<Catalog>(() => {
     // Hidden metric rows ride along in the same fetch: __dl__<id>, __sh__<id>,
     // __country_XX__ — their play_count is the metric value.
