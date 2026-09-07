@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SITE = 'https://gracesermons.org';
-const DEFAULT_TITLE = 'Grace Sermons — Christ Focused Sermons. Anytime.';
+const DEFAULT_TITLE = 'Grace Sermons — Christ-Exalting Baptist Preaching';
 const DEFAULT_DESC =
-  'Grace Sermons — Christ-focused Baptist sermons, devotionals, and worship. Listen anytime.';
+  'Grace Sermons — Christ-exalting Baptist sermons, devotionals, and worship. Listen anytime.';
 
 // Per-route <title> / description for search engines and browser tabs.
 // Sermon pages set their own title once the sermon loads (SermonPage.tsx).
@@ -32,7 +32,7 @@ const META: Record<string, { title: string; desc: string }> = {
   },
   '/support': {
     title: 'Support Grace Sermons',
-    desc: 'Give a one-time or monthly gift to help keep Christ-focused preaching free for everyone.',
+    desc: 'Give a one-time or monthly gift to help keep Christ-exalting preaching free for everyone.',
   },
 };
 

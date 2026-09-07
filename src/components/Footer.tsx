@@ -12,7 +12,7 @@ export function Footer() {
             <span className="font-display text-lg font-semibold text-white">Grace Sermons</span>
           </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-stone-400">
-            Christ-focused Baptist sermons, devotionals, and worship — free to listen, anytime.
+            Christ-exalting Baptist sermons, devotionals, and worship — free to listen, anytime.
           </p>
           <p className="mt-4 text-sm">
             <a href="mailto:contact@gracesermons.org" className="text-gold-300 hover:text-gold-400">
