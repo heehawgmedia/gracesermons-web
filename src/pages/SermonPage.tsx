@@ -22,7 +22,7 @@ export function SermonPage() {
   useEffect(() => {
     if (sermon) document.title = `${sermon.title} — Grace Sermons`;
     return () => {
-      document.title = 'Grace Sermons — Christ-Exalting Baptist Preaching';
+      document.title = 'Grace Sermons — He Must Increase';
     };
   }, [sermon]);
 

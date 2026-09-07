@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SITE = 'https://gracesermons.org';
-const DEFAULT_TITLE = 'Grace Sermons — Christ-Exalting Baptist Preaching';
+const DEFAULT_TITLE = 'Grace Sermons — He Must Increase';
 const DEFAULT_DESC =
   'Grace Sermons — Christ-exalting Baptist sermons, devotionals, and worship. Listen anytime.';
 

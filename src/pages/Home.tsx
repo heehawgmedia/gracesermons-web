@@ -29,7 +29,7 @@ export function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-900/90 via-forest-900/40 to-black/20" />
         <div className="mx-auto flex max-w-6xl flex-col justify-end px-4 pt-24 pb-12 sm:px-6 sm:pt-44 sm:pb-14">
           <p className="text-xs font-semibold tracking-[0.25em] text-gold-300 uppercase">
-            Christ-Exalting Baptist Preaching
+            He Must Increase · John 3:30
           </p>
           <h1 className="font-display mt-3 max-w-2xl text-4xl leading-tight font-semibold text-white sm:text-5xl">
             Hear the Word. <span className="text-gold-300">Grow in Grace.</span>
