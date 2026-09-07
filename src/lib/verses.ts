@@ -41,6 +41,7 @@ export const VERSES: Verse[] = [
   { ref: 'Lamentations 3:22-23', text: 'It is of the LORD’s mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.' },
   { ref: 'Isaiah 26:3', text: 'Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.' },
   { ref: 'Matthew 28:19', text: 'Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.' },
+  { ref: 'John 3:30', text: 'He must increase, but I must decrease.' },
   { ref: 'Revelation 22:20', text: 'He which testifieth these things saith, Surely I come quickly. Amen. Even so, come, Lord Jesus.' },
 ];
 

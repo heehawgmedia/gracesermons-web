@@ -29,7 +29,7 @@ export function Header() {
               Grace Sermons
             </span>
             <span className="hidden text-[11px] tracking-widest text-gold-500 uppercase sm:block">
-              He Must Increase
+              He Must Increase · John 3:30
             </span>
           </div>
         </Link>
