@@ -5,6 +5,7 @@ import type { Sermon } from '../lib/types';
 import { usePlayer } from '../player/PlayerContext';
 import { useCatalog } from '../lib/useCatalog';
 import { ShareButton } from './ShareButton';
+import { isNew } from '../lib/recent';
 import { DownloadButton } from './DownloadButton';
 
 interface Props {
@@ -33,6 +34,11 @@ export function SermonCard({ sermon, pastorName, queue, queueLabel }: Props) {
           className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent" />
+        {isNew(sermon.createdAt) && (
+          <span className="absolute top-3 left-3 rounded-full bg-gold-400 px-2.5 py-1 text-[11px] font-bold tracking-wide text-forest-900 uppercase shadow">
+            New
+          </span>
+        )}
         <div className="absolute top-3 right-3 flex flex-col gap-2">
           <ShareButton sermon={sermon} pastorName={pastorName} />
           {playable && <DownloadButton sermon={sermon} pastorName={pastorName} />}

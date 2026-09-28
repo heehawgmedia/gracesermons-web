@@ -4,6 +4,7 @@ import { usePlayer } from '../player/PlayerContext';
 import { verseOfTheDay } from '../lib/verses';
 import { IMAGES, fallbackCover } from '../lib/images';
 import { SermonCard } from '../components/SermonCard';
+import { NewUploadsBanner } from '../components/NewUploadsBanner';
 import { formatDuration } from '../lib/api';
 
 export function Home() {
@@ -19,6 +20,8 @@ export function Home() {
 
   return (
     <>
+      <NewUploadsBanner />
+
       {/* Hero */}
       <section className="relative isolate min-h-[380px] overflow-hidden sm:min-h-[520px]">
         <img
