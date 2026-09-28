@@ -30,6 +30,9 @@ export default defineConfig({
         // Precache the app shell; never intercept audio or Supabase data —
         // sermons stream from the network and data must stay fresh.
         globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        // The pre-rendered share pages exist only for crawlers; precaching
+        // hundreds of them would bloat every install.
+        globIgnores: ['sermon/**'],
         navigateFallback: '/index.html',
         runtimeCaching: [],
       },
