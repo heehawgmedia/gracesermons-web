@@ -10,6 +10,12 @@ Options -Indexes
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
+  # Pre-rendered share pages: crawlers (Facebook, X, WhatsApp, iMessage) do not
+  # run JavaScript, so they need real HTML with Open Graph tags. Serve it for
+  # the exact shared URL so the link never changes shape.
+  RewriteCond %{DOCUMENT_ROOT}/sermon/$1.html -f
+  RewriteRule ^sermon/([A-Za-z0-9._-]+)/?$ /sermon/$1.html [L]
+
   # Everything else is a client-side route — hand it to the app
   RewriteRule ^ index.html [L]
 </IfModule>
