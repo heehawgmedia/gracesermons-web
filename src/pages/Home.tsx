@@ -67,8 +67,9 @@ export function Home() {
         </div>
       </section>
 
-      {/* Verse of the day */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6">
+      {/* Verse of the day — lifted above the hero it overlaps, which is a
+          positioned (isolated) section and would otherwise paint on top. */}
+      <section className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
         <div className="-mt-8 rounded-2xl border border-stone-200 bg-white p-6 shadow-lg sm:p-8">
           <p className="text-xs font-semibold tracking-widest text-gold-500 uppercase">
             Verse of the Day
