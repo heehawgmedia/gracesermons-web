@@ -11,6 +11,16 @@ const isAndroid = /Android/.test(ua);
 // Links opened from Facebook/Instagram land in their built-in browser, which
 // cannot install apps — the visitor has to open the page in Safari or Chrome.
 const inAppBrowser = /FBAN|FBAV|FB_IAB|Instagram/.test(ua);
+// iPhone installs are done through Chrome (Safari was not adding the app).
+const isIOSChrome = /CriOS/.test(ua);
+const CHROME_APP_STORE = 'https://apps.apple.com/app/google-chrome/id535886823';
+
+/** This same page, opened in Chrome for iOS via its URL scheme. */
+function chromeUrl(): string {
+  if (typeof location === 'undefined') return '';
+  const scheme = location.protocol === 'https:' ? 'googlechromes://' : 'googlechrome://';
+  return scheme + location.host + location.pathname + location.search;
+}
 
 function runningAsApp(): boolean {
   if (typeof window === 'undefined') return false;
@@ -66,31 +76,57 @@ export function InstallButton() {
               </div>
             </div>
 
-            {inAppBrowser ? (
+            {isIOS ? (
+              <>
+                {!isIOSChrome && (
+                  <div className="mt-4 rounded-xl bg-gold-300/25 p-3.5 text-sm text-forest-800">
+                    <p>
+                      Use <strong>Google Chrome</strong> to add the app.
+                    </p>
+                    <a
+                      href={chromeUrl()}
+                      className="mt-2.5 block rounded-full bg-forest-700 py-2 text-center text-sm font-semibold text-white transition hover:bg-forest-600"
+                    >
+                      Open in Chrome
+                    </a>
+                    <a
+                      href={CHROME_APP_STORE}
+                      className="mt-2 block text-center text-xs text-forest-700 underline"
+                    >
+                      Don&rsquo;t have Chrome? Get it free from the App Store
+                    </a>
+                  </div>
+                )}
+                <ol className="mt-4 space-y-3 text-sm text-stone-700">
+                  <li className="flex items-start gap-3">
+                    <Step n={1} />
+                    <span>
+                      In Chrome, tap the <strong>Share</strong> button{' '}
+                      <svg className="inline size-4 -translate-y-0.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12M8 7l4-4 4 4M7 11H6a1 1 0 00-1 1v8a1 1 0 001 1h12a1 1 0 001-1v-8a1 1 0 00-1-1h-1" />
+                      </svg>
+                      .
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Step n={2} />
+                    <span>
+                      Tap <strong>View More</strong>.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Step n={3} />
+                    <span>
+                      Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong>.
+                    </span>
+                  </li>
+                </ol>
+              </>
+            ) : inAppBrowser ? (
               <p className="mt-4 text-sm leading-relaxed text-stone-700">
-                First open this page in {isIOS ? 'Safari' : 'Chrome'}: tap the{' '}
-                <strong>⋯</strong> menu and choose <strong>Open in browser</strong>. Then tap{' '}
-                <strong>Get App</strong> again.
+                First open this page in Chrome: tap the <strong>⋯</strong> menu and choose{' '}
+                <strong>Open in browser</strong>. Then tap <strong>Get App</strong> again.
               </p>
-            ) : isIOS ? (
-              <ol className="mt-4 space-y-3 text-sm text-stone-700">
-                <li className="flex items-start gap-3">
-                  <Step n={1} />
-                  <span>
-                    Tap the <strong>Share</strong> button{' '}
-                    <svg className="inline size-4 -translate-y-0.5 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12M8 7l4-4 4 4M7 11H6a1 1 0 00-1 1v8a1 1 0 001 1h12a1 1 0 001-1v-8a1 1 0 00-1-1h-1" />
-                    </svg>{' '}
-                    — on newer iPhones it&rsquo;s inside the <strong>⋯</strong> menu.
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Step n={2} />
-                  <span>
-                    Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong>.
-                  </span>
-                </li>
-              </ol>
             ) : (
               <ol className="mt-4 space-y-3 text-sm text-stone-700">
                 <li className="flex items-start gap-3">
