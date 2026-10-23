@@ -12,6 +12,7 @@ import { PastorDetail } from './pages/PastorDetail';
 import { Devotional } from './pages/Devotional';
 import { Bible } from './pages/Bible';
 import { Music } from './pages/Music';
+import { Hymns } from './pages/Hymns';
 import { Give } from './pages/Give';
 import { AdminPage } from './pages/admin/AdminPage';
 
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="devotional" element={<Devotional />} />
               <Route path="bible" element={<Bible />} />
               <Route path="music" element={<Music />} />
+              <Route path="hymns" element={<Hymns />} />
               <Route path="support" element={<Give />} />
               <Route
                 path="reach"

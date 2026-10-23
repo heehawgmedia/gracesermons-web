@@ -8,6 +8,7 @@ const NAV = [
   { to: '/devotional', label: 'Devotional' },
   { to: '/bible', label: 'Bible' },
   { to: '/music', label: 'Music' },
+  { to: '/hymns', label: 'Hymns' },
   { to: '/reach', label: 'Reach Map' },
   { to: '/support', label: 'Support' },
 ];
@@ -16,7 +17,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+    `rounded-full px-3 py-2 text-sm font-medium transition-colors xl:px-4 ${
       isActive ? 'bg-forest-700 text-white' : 'text-stone-600 hover:bg-forest-50 hover:text-forest-700'
     }`;
 
@@ -36,7 +37,7 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-1 lg:flex">
             {NAV.map((item) => (
               <NavLink key={item.to} to={item.to} className={linkClass} end={item.to === '/'}>
                 {item.label}
@@ -47,7 +48,7 @@ export function Header() {
           <InstallButton />
 
           <button
-            className="rounded-lg p-2 text-stone-600 hover:bg-stone-100 md:hidden"
+            className="rounded-lg p-2 text-stone-600 hover:bg-stone-100 lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -64,7 +65,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="flex flex-col gap-1 border-t border-stone-200 px-4 py-3 md:hidden">
+        <nav className="flex flex-col gap-1 border-t border-stone-200 px-4 py-3 lg:hidden">
           {NAV.map((item) => (
             <NavLink
               key={item.to}

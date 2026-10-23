@@ -26,6 +26,10 @@ const META: Record<string, { title: string; desc: string }> = {
     title: 'Read the Bible (KJV) — Grace Sermons',
     desc: 'Read the King James Bible online, book by book and chapter by chapter.',
   },
+  '/hymns': {
+    title: 'Hymns — Grace Sermons',
+    desc: 'Hymns of the faith with the words on screen — sing along anytime.',
+  },
   '/reach': {
     title: 'Gospel Reach Map — Grace Sermons',
     desc: 'See the countries where Grace Sermons messages are being heard around the world.',

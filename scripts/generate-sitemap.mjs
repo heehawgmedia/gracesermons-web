@@ -32,6 +32,7 @@ const lines = [
   url('/', today, '1.0', 'daily'),
   url('/sermons', today, '0.9', 'daily'),
   url('/music', today, '0.7', 'weekly'),
+  url('/hymns', today, '0.7', 'weekly'),
   url('/devotional', today, '0.6', 'daily'),
   url('/bible', null, '0.5', 'monthly'),
   url('/reach', null, '0.4', 'weekly'),
