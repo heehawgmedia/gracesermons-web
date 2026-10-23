@@ -1,10 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IMAGES } from '../lib/images';
 import { PageHero } from './Sermons';
 import { HYMN_VIDEOS, type HymnVideo } from '../lib/videos';
 import { usePlayer } from '../player/PlayerContext';
 
 export function Hymns() {
+  // Only one thing plays at a time: one video, or the sermon player.
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const player = usePlayer();
+
+  // Starting a sermon (or music) in the player bar stops the video.
+  useEffect(() => {
+    if (player.isPlaying) setActiveId(null);
+  }, [player.isPlaying]);
+
+  const start = (id: string) => {
+    if (player.isPlaying) player.toggle(); // don't talk over a sermon
+    setActiveId(id);
+  };
+
   return (
     <>
       <PageHero
@@ -15,7 +29,13 @@ export function Hymns() {
       <div className="mx-auto max-w-5xl px-4 pt-10 pb-4 sm:px-6">
         <div className="grid gap-6 sm:grid-cols-2">
           {HYMN_VIDEOS.map((v) => (
-            <VideoCard key={v.id} video={v} />
+            <VideoCard
+              key={v.id}
+              video={v}
+              playing={activeId === v.id}
+              onPlay={() => start(v.id)}
+              onStop={() => setActiveId(null)}
+            />
           ))}
         </div>
       </div>
@@ -25,15 +45,17 @@ export function Hymns() {
 
 // Shows the thumbnail until tapped, so YouTube only loads for videos people
 // actually play — keeps the page quick on phones.
-function VideoCard({ video }: { video: HymnVideo }) {
-  const [playing, setPlaying] = useState(false);
-  const player = usePlayer();
-
-  const start = () => {
-    if (player.isPlaying) player.toggle(); // don't talk over a sermon
-    setPlaying(true);
-  };
-
+function VideoCard({
+  video,
+  playing,
+  onPlay,
+  onStop,
+}: {
+  video: HymnVideo;
+  playing: boolean;
+  onPlay: () => void;
+  onStop: () => void;
+}) {
   return (
     <article className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
       <div className="relative aspect-video bg-black">
@@ -47,7 +69,7 @@ function VideoCard({ video }: { video: HymnVideo }) {
           />
         ) : (
           <button
-            onClick={start}
+            onClick={onPlay}
             aria-label={`Play ${video.title}`}
             className="group absolute inset-0 size-full"
           >
@@ -72,6 +94,17 @@ function VideoCard({ video }: { video: HymnVideo }) {
           <span className="shrink-0 rounded-full bg-forest-50 px-2 py-0.5 text-[11px] font-medium text-forest-700">
             {video.style}
           </span>
+        )}
+        {playing && (
+          <button
+            onClick={onStop}
+            className="ml-auto flex shrink-0 items-center gap-1.5 rounded-full bg-forest-700 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-forest-600"
+          >
+            <svg className="size-3.5" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="6" width="12" height="12" rx="1.5" />
+            </svg>
+            Stop
+          </button>
         )}
       </div>
     </article>
