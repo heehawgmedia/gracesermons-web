@@ -9,5 +9,6 @@ export interface HymnVideo {
 }
 
 export const HYMN_VIDEOS: HymnVideo[] = [
+  { id: 'SXsC1JuM_Xw', title: 'Be Thou My Vision', style: 'Acoustic' },
   { id: '2mSkoTjLCLQ', title: 'It Is Well with My Soul', style: 'Bluegrass' },
 ];
