@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { fetchPastors, fetchSeries, fetchSermons } from './api';
 import { CatalogContext, type Catalog } from './useCatalog';
 import type { Pastor, Sermon, SermonSeries } from './types';
+import { monthKey } from './metrics';
 import { usePlayer } from '../player/PlayerContext';
 
 // Alphabetical key that ignores leading punctuation ('Tis So Sweet → Tis So Sweet).
@@ -13,6 +14,8 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   const [series, setSeries] = useState<SermonSeries[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Plays made in this session, not yet reflected in the fetched metric rows.
+  const [livePlays, setLivePlays] = useState<Record<string, number>>({});
   const { registerPastorNames } = usePlayer();
 
   const refresh = useCallback(() => {
@@ -41,6 +44,7 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       setSermons((prev) =>
         prev.map((s) => (s.id === id ? { ...s, playCount: s.playCount + 1 } : s))
       );
+      setLivePlays((prev) => ({ ...prev, [id]: (prev[id] ?? 0) + 1 }));
     };
     window.addEventListener('gs:played', onPlayed);
     return () => window.removeEventListener('gs:played', onPlayed);
@@ -52,6 +56,8 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
     const downloads = new Map<string, number>();
     const shares = new Map<string, number>();
     const countries: Record<string, number> = {};
+    const recent = new Map<string, number>(Object.entries(livePlays));
+    const months = new Set([monthKey(0), monthKey(1)]);
     for (const s of sermons) {
       if (s.topic !== '__meta__') continue;
       let m = s.title.match(/^__dl__(.+)$/);
@@ -60,6 +66,8 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
         shares.set(m[1], (shares.get(m[1]) ?? 0) + s.playCount);
       else if ((m = s.title.match(/^__country_([A-Z]{2})__$/)))
         countries[m[1]] = (countries[m[1]] ?? 0) + s.playCount;
+      else if ((m = s.title.match(/^__pm__(\d{4}-\d{2})__(.+)$/)) && months.has(m[1]))
+        recent.set(m[2], (recent.get(m[2]) ?? 0) + s.playCount);
     }
     const MUSIC_TOPICS = new Set(['Special Music', 'Instrumental Hymn', '__meta__']);
     return {
@@ -77,9 +85,10 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
       seriesById: (id) => series.find((s) => s.id === id),
       downloadsFor: (id) => downloads.get(id) ?? 0,
       sharesFor: (id) => shares.get(id) ?? 0,
+      recentPlaysFor: (id) => recent.get(id) ?? 0,
       countries,
     };
-  }, [sermons, pastors, series, loading, error, refresh]);
+  }, [sermons, pastors, series, loading, error, refresh, livePlays]);
 
   return <CatalogContext.Provider value={value}>{children}</CatalogContext.Provider>;
 }

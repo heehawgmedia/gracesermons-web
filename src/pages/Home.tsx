@@ -8,14 +8,20 @@ import { NewUploadsBanner } from '../components/NewUploadsBanner';
 import { formatDuration } from '../lib/api';
 
 export function Home() {
-  const { sermons, pastorById, loading, error } = useCatalog();
+  const { sermons, pastorById, recentPlaysFor, loading, error } = useCatalog();
   const player = usePlayer();
   const verse = verseOfTheDay();
 
   // Most recently *uploaded* (not the sermon's preached date).
   const recent = [...sermons].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 8);
-  // Top 10 by play count, ranked.
-  const popular = [...sermons].sort((a, b) => b.playCount - a.playCount).slice(0, 10);
+  // Top 10 by plays this month and last, so the list follows what people are
+  // listening to now; all-time plays break ties and fill any remaining places.
+  const popular = [...sermons]
+    .sort(
+      (a, b) =>
+        recentPlaysFor(b.id) - recentPlaysFor(a.id) || b.playCount - a.playCount
+    )
+    .slice(0, 10);
   const playable = sermons.filter((s) => s.audioUrl);
 
   return (
@@ -118,6 +124,9 @@ export function Home() {
           {/* Popular */}
           <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
             <h2 className="font-display text-2xl font-semibold text-forest-800">Top 10 Most Played</h2>
+            <p className="mt-1 text-sm text-stone-500">
+              What people are listening to this month and last.
+            </p>
             <ol className="mt-6 divide-y divide-stone-200 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
               {popular.map((sermon, i) => (
                 <li key={sermon.id}>
@@ -145,6 +154,11 @@ export function Home() {
                       </span>
                     </span>
                     <span className="shrink-0 text-xs tabular-nums text-stone-400">
+                      {recentPlaysFor(sermon.id) > 0 && (
+                        <span className="mr-2 font-semibold text-gold-500">
+                          {recentPlaysFor(sermon.id).toLocaleString()} recent
+                        </span>
+                      )}
                       {sermon.playCount.toLocaleString()} plays
                     </span>
                   </button>

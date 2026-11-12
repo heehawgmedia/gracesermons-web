@@ -19,6 +19,8 @@ export interface Catalog {
   downloadsFor: (sermonId: string) => number;
   /** Times a message was shared. */
   sharesFor: (sermonId: string) => number;
+  /** Plays of a message this month and last month. */
+  recentPlaysFor: (sermonId: string) => number;
   /** Visits per ISO-3166 alpha-2 country code, for the reach map. */
   countries: Record<string, number>;
 }

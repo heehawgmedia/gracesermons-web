@@ -6,6 +6,7 @@ import { supabase } from './supabase';
 //   '__country_XX__'       — visits from ISO country XX
 //   '__dl__<sermonId>'     — downloads of one message
 //   '__sh__<sermonId>'     — shares of one message
+//   '__pm__YYYY-MM__<sermonId>' — plays of one message in one month
 // Rows are created lazily on first use; a creation race just means the loser
 // re-reads the winner's row.
 
@@ -48,6 +49,14 @@ async function bumpMeta(title: string): Promise<void> {
 
 export const recordDownload = (sermonId: string) => bumpMeta(`__dl__${sermonId}`);
 export const recordShare = (sermonId: string) => bumpMeta(`__sh__${sermonId}`);
+/** 'YYYY-MM' for the month `back` months before now (UTC). */
+export function monthKey(back = 0): string {
+  const d = new Date();
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - back, 1)).toISOString().slice(0, 7);
+}
+
+/** Per-month play counter, so the Top 10 can follow what people listen to now. */
+export const recordMonthlyPlay = (sermonId: string) => bumpMeta(`__pm__${monthKey()}__${sermonId}`);
 export const recordCountry = (iso2: string) => bumpMeta(`__country_${iso2}__`);
 
 /** Country of the current visitor via free geo APIs (country-level only). */

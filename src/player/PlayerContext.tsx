@@ -10,6 +10,7 @@ import {
 } from 'react';
 import type { Sermon } from '../lib/types';
 import { incrementPlayCount } from '../lib/api';
+import { recordMonthlyPlay } from '../lib/metrics';
 
 // Persistent resume positions, keyed by sermon id.
 const POSITIONS_KEY = 'gs_playback_positions';
@@ -130,6 +131,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       }));
       updateMediaSession(sermon);
       void incrementPlayCount(sermon.id);
+      void recordMonthlyPlay(sermon.id);
       // Let the catalog bump its in-memory count so rankings adjust live.
       window.dispatchEvent(new CustomEvent('gs:played', { detail: sermon.id }));
     },
