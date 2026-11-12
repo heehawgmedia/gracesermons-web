@@ -31,6 +31,9 @@ const BUCKET = 'sermon-files';
 const MUSIC = new Set(['Instrumental Hymn', 'Special Music']);
 const MAX_BYTES = 48 * 1024 * 1024; // bucket cap is 50 MB
 const WORKERS = 2;
+// Bumped when the processing changes, so finished messages are rendered again
+// and browsers do not keep playing a cached earlier version.
+const VERSION = 'v2';
 
 const [workdir, backupDir, ...flags] = process.argv.slice(2);
 const flag = (name) => {
@@ -47,7 +50,7 @@ mkdirSync(backupDir, { recursive: true });
 
 const readLines = (p) =>
   existsSync(p) ? readFileSync(p, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [];
-const finished = new Set(readLines(logPath).filter((r) => r.status !== 'error').map((r) => r.id));
+const finished = new Set(readLines(logPath).filter((r) => r.status !== 'error' && r.version === VERSION).map((r) => r.id));
 const survey = new Map(readLines(join(workdir, 'survey.jsonl')).map((r) => [r.id, r]));
 
 const catalog = JSON.parse(readFileSync(join(workdir, 'catalog.json'), 'utf8'));
@@ -55,7 +58,6 @@ const catalog = JSON.parse(readFileSync(join(workdir, 'catalog.json'), 'utf8'));
 const todo = catalog
   .filter((s) => s.audio_url && !MUSIC.has(s.topic) && !finished.has(s.id))
   .filter((s) => !only || only.some((p) => s.id.startsWith(p)))
-  .filter((s) => !s.audio_url.includes('/audio/cleaned/'))
   .sort((a, b) => (survey.get(a.id)?.lufs ?? 0) - (survey.get(b.id)?.lufs ?? 0))
   .slice(0, limit);
 
@@ -135,9 +137,12 @@ function chain(s, before) {
   const tilt = sv ? sv.presence - sv.body : -12;
   const lift = Math.max(0, Math.min(5, (-14 - tilt) * 0.6));
   if (lift >= 1) filters.push(`equalizer=f=3200:t=q:w=0.9:g=${lift.toFixed(1)}`);
-  filters.push('dynaudnorm=f=500:g=31:p=0.5:m=8:r=0.0');
-  filters.push('acompressor=threshold=0.1:ratio=3:attack=8:release=200:makeup=2');
-  filters.push('loudnorm=I=-16:TP=-1.5:LRA=7');
+  // Level slowly (fast compression lifts the room echo after each word), then
+  // pull down the sound between words so that ring is quieter, then set the
+  // final loudness. Messages with big loud/soft swings get tighter leveling.
+  filters.push(`loudnorm=I=-20:TP=-3:LRA=${before.lra > 10 ? 7 : 11}`);
+  filters.push('compand=attacks=0.02:decays=0.25:points=-90/-90|-60/-82|-42/-54|-30/-30|0/0');
+  filters.push('loudnorm=I=-16:TP=-1.5:LRA=11');
   return { filters: filters.join(','), lift: Number(lift.toFixed(1)), before };
 }
 
@@ -182,14 +187,14 @@ async function clean(s) {
   renameSync(tmp, cleanFile);
 
   const row = {
-    id: s.id, title: s.title, pastor: s.pastor_name, status: 'rendered',
+    id: s.id, title: s.title, pastor: s.pastor_name, status: 'rendered', version: VERSION,
     before, after, lift: c.lift, kbps,
     origBytes: statSync(origFile).size, cleanBytes: statSync(cleanFile).size,
     oldUrl: s.audio_url, origFile, cleanFile,
   };
   if (dry) return row;
 
-  const storagePath = `audio/cleaned/${s.id}.mp3`;
+  const storagePath = `audio/cleaned/${s.id}-${VERSION}.mp3`;
   await uploadFile(storagePath, readFileSync(cleanFile));
   const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
   // The storage gateway rejects HEAD, so ask for one byte and read the total.
@@ -203,6 +208,8 @@ async function clean(s) {
     .from('sermons').update({ audio_url: urlData.publicUrl }).eq('id', s.id).select('id,audio_url');
   if (error) throw new Error(error.message);
   if (!updated?.length || updated[0].audio_url !== urlData.publicUrl) throw new Error('sermon row did not update');
+  // Drop the earlier cleaned render (never the original upload).
+  await supabase.storage.from(BUCKET).remove([`audio/cleaned/${s.id}.mp3`]).catch(() => {});
   return { ...row, status: 'live', newUrl: urlData.publicUrl };
 }
 

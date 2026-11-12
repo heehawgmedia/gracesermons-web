@@ -4,6 +4,7 @@ import { usePlayer } from '../player/PlayerContext';
 import { verseOfTheDay } from '../lib/verses';
 import { IMAGES, fallbackCover } from '../lib/images';
 import { SermonCard } from '../components/SermonCard';
+import { TopicSearch } from '../components/TopicSearch';
 import { NewUploadsBanner } from '../components/NewUploadsBanner';
 import { formatDuration } from '../lib/api';
 
@@ -98,6 +99,8 @@ export function Home() {
 
       {!loading && !error && (
         <>
+          <TopicSearch />
+
           {/* Recently added */}
           <section className="mx-auto max-w-6xl px-4 pt-16 sm:px-6">
             <div className="flex items-end justify-between">
