@@ -179,7 +179,19 @@ async function clean(s) {
     rmSync(tmp, { force: true });
     throw new Error(`duration mismatch ${src.duration} -> ${out.duration}`);
   }
-  const after = await loudness(tmp);
+  let after = await loudness(tmp);
+  // A few recordings land short of the target (long quiet stretches fool the
+  // leveler). Make up the difference with plain gain and a peak limiter.
+  if (!(after.lufs > -19 && after.lufs < -13) && after.lufs > -26 && after.lufs < -8) {
+    const trim = (-16 - after.lufs).toFixed(1);
+    const r2 = await run('ffmpeg', [
+      '-hide_banner', '-nostdin', '-y', '-i', origFile, '-vn',
+      '-af', `${c.filters},volume=${trim}dB,alimiter=limit=0.84:level=false`,
+      '-ar', lowRate ? '22050' : '44100', '-ac', '1', '-c:a', 'libmp3lame', '-b:a', `${kbps}k`, tmp,
+    ]);
+    if (r2.code !== 0) throw new Error('ffmpeg: ' + r2.err.split('\n').slice(-3).join(' | '));
+    after = await loudness(tmp);
+  }
   if (!(after.lufs > -19 && after.lufs < -13)) {
     rmSync(tmp, { force: true });
     throw new Error(`cleaned loudness off target: ${after.lufs}`);
